@@ -23,6 +23,36 @@
 
 namespace bustub {
 
+
+
+class LruNode
+{
+public:
+  /* data */
+  frame_id_t key;
+  size_t count=1;
+  bool enable_evict = 1;
+  LruNode* prev;
+  LruNode* next;
+
+  LruNode(frame_id_t key);
+  void set_enable_evict(bool xxx){
+    enable_evict = xxx;
+  }
+  int get_count(){
+    return count;
+  }
+
+  ~LruNode();
+
+
+};
+
+
+
+
+
+
 /**
  * LRUKReplacer implements the LRU-k replacement policy.
  *
@@ -132,6 +162,21 @@ class LRUKReplacer {
    */
   auto Size() -> size_t;
 
+  // auto del_node(frame_id_t frame_id) -> bool;
+  // auto HisAddNode(frame_id_t frame_id) -> bool;
+  // auto MovNode(frame_id_t frame_id) -> bool;
+  // auto BufMovHead(frame_id_t frame_id) -> bool;
+  // 删除队尾节点
+
+  // 放置到队首
+  auto BufHeadNode(LruNode* buf_node) -> bool;
+  // 删除队尾
+  auto HisDelNode() -> bool;
+  auto BufDelNode() -> bool;
+  auto DelNode(LruNode* node) -> LruNode*;
+  auto AddNode(LruNode*& head, LruNode* node) -> bool;
+
+
  private:
   // TODO(student): implement me! You can replace these member variables as you like.
   // Remove maybe_unused if you start using them.
@@ -140,6 +185,8 @@ class LRUKReplacer {
   [[maybe_unused]] size_t replacer_size_;
   [[maybe_unused]] size_t k_;
   std::mutex latch_;
+  std::unordered_map<frame_id_t,LruNode*> buf_mp_,his_mp_;
+  LruNode* buf_list_ = nullptr,* his_list_ = nullptr;
 };
 
 }  // namespace bustub
